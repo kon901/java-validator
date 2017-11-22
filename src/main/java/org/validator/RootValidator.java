@@ -11,7 +11,7 @@ public class RootValidator implements Validator {
 	private RootValidator() {
 	}
 
-	public static <T> RootValidator validator() {
+	public static RootValidator validator() {
 		return new RootValidator();
 	}
 
@@ -23,27 +23,25 @@ public class RootValidator implements Validator {
 		return when(() -> predicate);
 	}
 
-	public Validator isMandatory() {
-		return () -> {
-			;
-		};
+	public RootValidator isMandatory() {
+		return this;
 	}
 
-	public Validator shouldBeEqualTo(Object o) {
-		return () -> {
-			;
-		};
+	public RootValidator shouldBeEqualTo(Object o) {
+		return this;
 	}
 
 
-	public Validator shouldBeOneof(Object... o) {
-		return () -> {
-			;
-		};
+	public RootValidator shouldBeOneof(Object... o) {
+		return this;
 	}
 
 	@Override
 	public void validate() {
 		validators.stream().filter(validator -> validator != this).forEach(Validator::validate);
+	}
+
+	public RootValidator and(Object o) {
+		return this;
 	}
 }
