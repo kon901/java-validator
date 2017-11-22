@@ -1,5 +1,5 @@
 package org.validator;
 
-public interface Validator<T> {
+public interface Validator {
 	void validate();
 }

@@ -2,18 +2,44 @@ package org.validator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class RootValidator<T> implements Validator<T> {
+public class RootValidator implements Validator {
 
-	private final T objectToValidate;
 	private final List<Validator> validators = new ArrayList<>();
 
-	private RootValidator(T objectToValidate) {
-		this.objectToValidate = objectToValidate;
+	private RootValidator() {
 	}
 
-	public static <T> Validator validatorFor(T objectToValidate) {
-		return new RootValidator<>(objectToValidate);
+	public static <T> RootValidator validator() {
+		return new RootValidator();
+	}
+
+	public ValidationPredicate when(Supplier<Boolean> predicate) {
+		return null;
+	}
+
+	public ValidationPredicate when(boolean predicate) {
+		return when(() -> predicate);
+	}
+
+	public Validator isMandatory() {
+		return () -> {
+			;
+		};
+	}
+
+	public Validator shouldBeEqualTo(Object o) {
+		return () -> {
+			;
+		};
+	}
+
+
+	public Validator shouldBeOneof(Object... o) {
+		return () -> {
+			;
+		};
 	}
 
 	@Override
