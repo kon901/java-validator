@@ -7,41 +7,28 @@ import java.util.function.Supplier;
 public class RootValidator implements Validator {
 
 	private final List<Validator> validators = new ArrayList<>();
+	private ValidationPredicate validationPredicate;
 
-	private RootValidator() {
-	}
-
-	public static RootValidator validator() {
-		return new RootValidator();
-	}
-
-	public ValidationPredicate when(Supplier<Boolean> predicate) {
-		return null;
-	}
-
-	public ValidationPredicate when(boolean predicate) {
-		return when(() -> predicate);
-	}
-
-	public RootValidator isMandatory() {
-		return this;
-	}
-
-	public RootValidator shouldBeEqualTo(Object o) {
-		return this;
-	}
-
-
-	public RootValidator shouldBeOneof(Object... o) {
-		return this;
+	public RootValidator(ValidationPredicate validationPredicate) {
+		this.validationPredicate = validationPredicate;
 	}
 
 	@Override
 	public void validate() {
-		validators.stream().filter(validator -> validator != this).forEach(Validator::validate);
+		if (validationPredicate.test()) {
+			validators.stream().filter(validator -> validator != this).forEach(Validator::validate);
+		}
 	}
 
-	public RootValidator and(Object o) {
-		return this;
+	public FieldValidator and(Object o) {
+		return and(() -> o);
+	}
+
+	public FieldValidator and(Supplier<Object> supplier) {
+		return new FieldValidator(this, supplier);
+	}
+
+	public void addValidator(Validator validator) {
+		validators.add(validator);
 	}
 }

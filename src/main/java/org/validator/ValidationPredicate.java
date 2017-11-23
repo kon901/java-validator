@@ -6,20 +6,19 @@ public interface ValidationPredicate {
 
 	boolean test();
 
-	RootValidator then(Supplier<?> supplier);
-
-	default RootValidator then(Object o) {
+	default Validator then(Object o) {
 		return then(() -> o);
 	}
-
-	ValidationPredicate and(Supplier<Boolean> supplier);
-	ValidationPredicate or(Supplier<Boolean> supplier);
 
 	default ValidationPredicate and(boolean b) {
 		return and(() -> b);
 	}
 
-	default ValidationPredicate or(boolean b) {
-		return or(() -> b);
+	default ValidationPredicate and(Supplier<Boolean> supplier) {
+		return new MultiValidationPredicate(this, supplier);
+	}
+
+	default FieldValidator then(Supplier<Object> supplier) {
+		return new FieldValidator(new RootValidator(this), supplier);
 	}
 }
